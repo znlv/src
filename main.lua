@@ -202,8 +202,8 @@ SetAimPart()
 _G.AimbotEnabled = false
 _G.TeamCheck = false
 _G.AimPart = "UpperTorso"
-_G.Sensitivity = 0
-_G.MaxDistance = 100 -- Max distance in studs
+_G.Sensitivity = 0.1 -- Lower = smoother
+_G.MaxDistance = 1000
 _G.FocusKey = Enum.KeyCode.Q
 
 local Players = game:GetService("Players")
@@ -214,34 +214,48 @@ local Camera = workspace.CurrentCamera
 
 local Holding = false
 local FocusTarget = nil
+local AimTarget = nil -- Target locked while holding right click
+
+local function IsValidTarget(player)
+    return player and player.Character
+        and player.Character:FindFirstChild("HumanoidRootPart")
+        and player.Character:FindFirstChild("Humanoid")
+        and player.Character.Humanoid.Health > 0
+end
 
 local function GetClosestPlayer()
-    local maxDist = math.huge
     local closest = nil
-    for _, v in ipairs(Players:GetPlayers()) do
-        if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
-            if not _G.TeamCheck or v.Team ~= Players.LocalPlayer.Team then
-                local distanceFromCamera = (Camera.CFrame.Position - v.Character.HumanoidRootPart.Position).Magnitude
-                if distanceFromCamera <= _G.MaxDistance then
-                    local screenPoint = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+    local closestDist = math.huge
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= Players.LocalPlayer and IsValidTarget(player) then
+            if not _G.TeamCheck or player.Team ~= Players.LocalPlayer.Team then
+                local distance = (Camera.CFrame.Position - player.Character.HumanoidRootPart.Position).Magnitude
+                if distance <= _G.MaxDistance then
+                    local screenPoint = Camera:WorldToViewportPoint(player.Character.HumanoidRootPart.Position)
                     local mousePos = UserInputService:GetMouseLocation()
                     local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPoint.X, screenPoint.Y)).Magnitude
-                    if dist < maxDist then
-                        maxDist = dist
-                        closest = v
+
+                    if dist < closestDist then
+                        closestDist = dist
+                        closest = player
                     end
                 end
             end
         end
     end
+
     return closest
 end
 
 UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         Holding = true
+        if _G.AimbotEnabled and not FocusTarget then
+            AimTarget = GetClosestPlayer()
+        end
     elseif input.KeyCode == _G.FocusKey then
-        if not FocusTarget or not FocusTarget.Character or not FocusTarget.Character:FindFirstChild("Humanoid") or FocusTarget.Character.Humanoid.Health <= 0 then
+        if not FocusTarget or not IsValidTarget(FocusTarget) then
             FocusTarget = GetClosestPlayer()
         else
             FocusTarget = nil -- Unfocus
@@ -252,21 +266,24 @@ end)
 UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         Holding = false
+        AimTarget = nil -- Release lock-on when RMB is released
     end
 end)
 
 RunService.RenderStepped:Connect(function()
-    if Holding and _G.AimbotEnabled then
-        local target = FocusTarget or GetClosestPlayer()
-        if target and target.Character and target.Character:FindFirstChild(_G.AimPart) then
-            TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine), {
-                CFrame = CFrame.new(Camera.CFrame.Position, target.Character[_G.AimPart].Position)
-            }):Play()
-        end
+    if not _G.AimbotEnabled then return end
+    if not Holding and not FocusTarget then return end
+
+    local target = FocusTarget or AimTarget
+
+    if target and IsValidTarget(target) and target.Character:FindFirstChild(_G.AimPart) then
+        local targetPos = target.Character[_G.AimPart].Position
+        local currentPos = Camera.CFrame.Position
+        local newCFrame = CFrame.new(currentPos, targetPos)
+
+        Camera.CFrame = Camera.CFrame:Lerp(newCFrame, _G.Sensitivity)
     end
 end)
-
-
 
 Section2:NewToggle("Aimbot Toggle", "Hold Right Click to Lock On", function(state)
     _G.AimbotEnabled = state
