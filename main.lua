@@ -9,6 +9,21 @@ Section1:NewKeybind("Toggle Hub", "Minimalize", Enum.KeyCode.Insert, function()
     Library:ToggleUI()
 end)
 
+function recurse(instance)
+    if instance:IsA("Tool") or instance:IsA("HopperBin") then
+        print(instance:GetFullName())
+        if workspace.FilteringEnabled == false then
+            c = instance:Clone()
+            c.Parent = game.Players.LocalPlayer.Backpack
+       else
+            instance.Parent = game.Players.LocalPlayer.Backpack
+       end
+    end
+    for _, child in ipairs(instance:GetChildren()) do
+        recurse(child)
+    end
+end
+
 local Section5 = Tab1:NewSection("Credits")
 
 local Tab = Window:NewTab("Cheats")
@@ -131,6 +146,10 @@ Section2:NewTextBox("Teleport To:", "TextboxInfo", function(targetUsername)
     players = game:GetService("Players")
     targetPlayer = players:FindFirstChild(targetUsername)
     players.LocalPlayer.Character:MoveTo(targetPlayer.Character.Head.Position)
+end)
+
+Section2:NewButton("Clone Global Tools", "Gives all tools", function()
+    recurse(game)
 end)
 
 Section2:NewToggle("Wallhack Toggle", "Toggle ESP", function(state)
