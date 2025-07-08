@@ -183,11 +183,25 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
+local function SetAimPart()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= Players.LocalPlayer and player.Character then
+            if player.Character:FindFirstChild("UpperTorso") then
+                _G.AimPart = "UpperTorso"
+            elseif player.Character:FindFirstChild("Torso") then
+                _G.AimPart = "Torso"
+            end
+            break
+        end
+    end
+end
+
+SetAimPart()
+
 _G.AimbotEnabled = false
 _G.TeamCheck = false
-_G.AimPart = "Head"
+_G.AimPart = "UpperTorso"
 _G.Sensitivity = 0.3
-_G.MaxDistance = 50 -- max studs to lock onto
 
 local Holding = false
 local function GetClosestPlayer()
