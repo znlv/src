@@ -12,6 +12,7 @@ local Section5 = Tab1:NewSection("Credits") -- Can fill if needed
 
 local Tab = Window:NewTab("Cheats")
 local Section2 = Tab:NewSection("Universal")
+local Section3 = Tab:NewSection("LUA")
 
 -- 🟨 ESP Functions
 local function ActivateESP()
@@ -125,3 +126,108 @@ end)
 Section2:NewToggle("Aimbot Toggle", "Hold Right Click to Lock On", function(state)
     _G.AimbotEnabled = state
 end)
+Section3:NewToggle("Visible LUA Exuctor", "Run your own lua code", function(state)
+    Frame.Visible = state
+end)
+
+
+
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Exc = Instance.new("TextButton")
+local UICorner_2 = Instance.new("UICorner")
+local Code = Instance.new("TextBox")
+local UICorner_3 = Instance.new("UICorner")
+local Exc_2 = Instance.new("TextButton")
+local UICorner_4 = Instance.new("UICorner")
+local TextLabel = Instance.new("TextLabel")
+
+--Properties:
+
+Frame.Parent = (game:GetService("CoreGui") or gethui())
+Frame.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.432525963, 0, 0.414572865, 0)
+Frame.Size = UDim2.new(0, 521, 0, 252)
+Frame.Visible = false
+
+UICorner.Parent = Frame
+
+Exc.Name = "Exc"
+Exc.Parent = Frame
+Exc.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
+Exc.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Exc.BorderSizePixel = 0
+Exc.Position = UDim2.new(0.679462552, 0, 0.817460299, 0)
+Exc.Size = UDim2.new(0, 154, 0, 35)
+Exc.Font = Enum.Font.JosefinSans
+Exc.Text = "Execute"
+Exc.TextColor3 = Color3.fromRGB(255, 255, 255)
+Exc.TextSize = 14.000
+
+UICorner_2.Parent = Exc
+
+Code.Name = "Code"
+Code.Parent = Frame
+Code.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+Code.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Code.BorderSizePixel = 0
+Code.Position = UDim2.new(0.0767754316, 0, 0.142857149, 0)
+Code.Size = UDim2.new(0, 440, 0, 158)
+Code.Font = Enum.Font.SourceSans
+Code.Text = ""
+Code.TextColor3 = Color3.fromRGB(0, 0, 0)
+Code.TextSize = 14.000
+Code.TextXAlignment = Enum.TextXAlignment.Left
+Code.TextYAlignment = Enum.TextYAlignment.Top
+
+UICorner_3.Parent = Code
+
+Exc_2.Name = "Exc"
+Exc_2.Parent = Frame
+Exc_2.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
+Exc_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Exc_2.BorderSizePixel = 0
+Exc_2.Position = UDim2.new(0.0441458747, 0, 0.817460299, 0)
+Exc_2.Size = UDim2.new(0, 154, 0, 35)
+Exc_2.Font = Enum.Font.JosefinSans
+Exc_2.Text = "Clear"
+Exc_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+Exc_2.TextSize = 14.000
+
+UICorner_4.Parent = Exc_2
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Size = UDim2.new(0, 162, 0, 36)
+TextLabel.Font = Enum.Font.Unknown
+TextLabel.Text = "RZ | Cheats"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 14.000
+
+-- Scripts:
+
+local function AUUUKB_fake_script() -- Exc_2.LocalScript 
+	local script = Instance.new('LocalScript', Exc_2)
+
+	local button = script.Parent
+	local codeField = script.Parent.Parent:WaitForChild("Code")
+	
+	button.MouseButton1Click:Connect(function()
+		local code = codeField.Text
+		local func, err = loadstring(code)
+	
+		if func then
+			pcall(func)
+		else
+			warn("Code error: " .. err)
+		end
+	end)
+	
+end
+coroutine.wrap(AUUUKB_fake_script)()
+
