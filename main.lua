@@ -1,127 +1,125 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/WetCheezit/Bracket-V2/main/src.lua"))()
 
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Rain-Design/PPHUD/main/Library.lua'))()
-local Flags = Library.Flags
+-- Window
+local Window, MainGUI = Library:CreateWindow("RZ Project | By @94kx")
 
-local Window = Library:Window({
-   Text = "Baseplate"
-})
+-- Tabs
+local Tab1 = Window:CreateTab("Tab 1")
+local Tab2 = Window:CreateTab("Tab 2")
 
-local Tab = Window:Tab({
-   Text = "Aiming"
-})
+local Groupbox1 = Tab1:CreateGroupbox("Groupbox 1", "Left")
+local Groupbox2 = Tab1:CreateGroupbox("Groupbox 2", "Right")
 
-local Tab2 = Window:Tab({
-   Text = "Visual"
-})
+local Groupbox3 = Tab2:CreateGroupbox("Groupbox 1", "Left")
+local Groupbox4 = Tab2:CreateGroupbox("Groupbox 2", "Right")
 
-local Section = Tab:Section({
-   Text = "Aiming"
-})
+-- Groupbox 1
+local ExampleToggle = Groupbox1:CreateToggle("Example toggle", function(state)
+   print(state)
+end)
 
-local Section2 = Tab:Section({
-   Text = "Anti-Aim"
-})
+local ExampleToggle2 = Groupbox1:CreateToggle("Example keybind", function(state)
+   print(state)
+end)
 
-local Section3 = Tab:Section({
-   Text = "Ragebot",
-   Side = "Right"
-})
+local ExampleButton = Groupbox1:CreateButton("Example Button", function()
+    print("Pressed")
+end)
 
-Section:Check({
-   Text = "Aimbot",
-   Flag = "Aimbot"
-})
+ExampleToggle2:CreateKeyBind()
 
-Section:Check({
-   Text = "Silent-Aim",
-   Callback = function(bool)
-       .G_AimbotEnabled = bool
-   end
-})
+local ExampleSlider = Groupbox1:CreateSlider("Example slider", 0, 25, 0, function(value)
+   print(value)
+end)
 
-Section:Dropdown({
-   Text = "Body Part",
-   List = {"Head", "Torso", "Random"},
-   Callback = function(opt)
-       warn(opt)
-   end
-})
+local ExampleDropdown = Groupbox1:CreateDropdown("Example Dropdown", {"Option 1", "Option 2", "Option 3"}, function(state)
+   print(state)
+end)
 
-Section:Slider({
-   Text = "Hit Chance",
-   Minimum = 0,
-   Default = 60,
-   Maximum = 100,
-   Postfix = "%",
-   Callback = function(n)
-       warn(n)
-   end
-})
+local ExampleColorPicker = Groupbox1:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(state)
+   print(state.R, state.G, state.B)
+end)
 
-Section:Button({
-   Text = "Spawn",
-   Callback = function()
-       warn("Settings Reseted.")
-   end
-})
+-- Groupbox 2
+local ExampleToggle2 = Groupbox2:CreateToggle("Example toggle", function(state)
+   print(state)
+end)
 
-Section2:Check({
-   Text = "Spin"
-})
+local ExampleToggle3 = Groupbox2:CreateToggle("Example keybind", function(state)
+   print(state)
+end)
 
-Section2:Slider({
-   Text = "Pitch Offset",
-   Minimum = 100,
-   Default = 150,
-   Maximum = 500,
-   Callback = function(n)
-       warn(n)
-   end
-})
+local ExampleButton2 = Groupbox2:CreateButton("Example Button", function()
+    print("Pressed")
+end)
 
-Section2:Slider({
-   Text = "Yaw Offset",
-   Minimum = 100,
-   Default = 150,
-   Maximum = 500,
-   Callback = function(n)
-       warn(n)
-   end
-})
+ExampleToggle3:CreateKeyBind()
 
-Section2:Button({
-   Text = "Resolve Positions"
-})
+local ExampleSlider2 = Groupbox2:CreateSlider("Example slider", 0, 25, 0, function(value)
+   print(value)
+end)
 
-Section3:Check({
-   Text = "Auto-Wall",
-   Callback = function(bool)
-       warn(bool)
-   end
-})
+local ExampleDropdown2 = Groupbox2:CreateDropdown("Example Dropdown", {"Option 1", "Option 2", "Option 3"}, function(state)
+   print(state)
+end)
 
-Section3:Check({
-   Text = "Trigger Bot"
-})
+local ExampleColorPicker2 = Groupbox2:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(state)
+   print(state.R, state.G, state.B)
+end)
 
-Section3:Check({
-   Text = "Insta-Kill"
-})
+-- Groupbox 3
+local ExampleToggle4 = Groupbox3:CreateToggle("Example toggle", function(state)
+   print(state)
+end)
 
-Section3:Dropdown({
-   Text = "Hitscan Directions",
-   List = {"Left", "Right", "Up", "Down", "All"},
-   Callback = function(opt)
-       warn(opt)
-   end
-})
+local ExampleToggle5 = Groupbox3:CreateToggle("Example keybind", function(state)
+   print(state)
+end)
 
-Section3:Label({
-   Text = "Status: Undetected",
-   Color = Color3.fromRGB(100, 190, 31)
-})
+local ExampleButton3 = Groupbox3:CreateButton("Example Button", function()
+    print("Pressed")
+end)
 
-Tab:Select()
+ExampleToggle5:CreateKeyBind()
+
+local ExampleSlider3 = Groupbox3:CreateSlider("Example slider", 0, 25, 0, function(value)
+   print(value)
+end)
+
+local ExampleDropdown3 = Groupbox3:CreateDropdown("Example Dropdown", {"Option 1", "Option 2", "Option 3"}, function(state)
+   print(state)
+end)
+
+local ExampleColorPicker3 = Groupbox3:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(state)
+   print(state.R, state.G, state.B)
+end)
+
+-- Groupbox 4
+local ExampleToggle5 = Groupbox4:CreateToggle("Example toggle", function(state)
+   print(state)
+end)
+
+local ExampleToggle6 = Groupbox4:CreateToggle("Example keybind", function(state)
+   print(state)
+end)
+
+local ExampleButton4 = Groupbox4:CreateButton("Example Button", function()
+    print("Pressed")
+end)
+
+ExampleToggle6:CreateKeyBind()
+
+local ExampleSlider4 = Groupbox4:CreateSlider("Example slider", 0, 25, 0, function(value)
+   print(value)
+end)
+
+local ExampleDropdown4 = Groupbox4:CreateDropdown("Example Dropdown", {"Option 1", "Option 2", "Option 3"}, function(state)
+   print(state)
+end)
+
+local ExampleColorPicker4 = Groupbox4:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(state)
+   print(state.R, state.G, state.B)
+end)
 
 -- Aimbot Lib
 local Camera = workspace.CurrentCamera
