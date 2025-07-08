@@ -202,7 +202,7 @@ SetAimPart()
 _G.AimbotEnabled = false
 _G.TeamCheck = false
 _G.AimPart = "UpperTorso"
-_G.Sensitivity = 0.1 -- Lower = smoother
+_G.Sensitivity = 1 -- Lower = smoother
 _G.MaxDistance = 1000
 _G.FocusKey = Enum.KeyCode.Q
 
