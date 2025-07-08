@@ -185,7 +185,7 @@ local RunService = game:GetService("RunService")
 
 _G.AimbotEnabled = false
 _G.TeamCheck = false
-_G.AimPart = "Torso"
+_G.AimPart = "Head"
 _G.Sensitivity = 0.3
 _G.MaxDistance = 50 -- max studs to lock onto
 
