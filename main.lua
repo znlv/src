@@ -203,7 +203,7 @@ _G.AimbotEnabled = false
 _G.TeamCheck = false
 _G.AimPart = "UpperTorso"
 _G.Sensitivity = 1 -- Lower = smoother
-_G.MaxDistance = 50
+_G.MaxDistance = 15
 _G.FocusKey = Enum.KeyCode.Q
 
 local Players = game:GetService("Players")
