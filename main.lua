@@ -81,6 +81,7 @@ CodeBox.TextSize = 14
 CodeBox.TextXAlignment = Enum.TextXAlignment.Left
 CodeBox.TextYAlignment = Enum.TextYAlignment.Top
 Instance.new("UICorner", CodeBox)
+CodeBox.TextScaled = true
 
 local Title = Instance.new("TextLabel")
 Title.Parent = Frame
@@ -92,7 +93,7 @@ Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 14
 
 -- 💠 Toggle to show/hide the executor
-Section3:NewToggle("Visible LUA Executor", "Run your own Lua code", function(state)
+Section3:NewToggle("Toggle LUA Executor", "Run your own Lua code", function(state)
     cc.Enabled = state
 end)
 
@@ -201,7 +202,7 @@ SetAimPart()
 _G.AimbotEnabled = false
 _G.TeamCheck = false
 _G.AimPart = "UpperTorso"
-_G.Sensitivity = 0.3
+_G.Sensitivity = 0
 
 local Holding = false
 local function GetClosestPlayer()
