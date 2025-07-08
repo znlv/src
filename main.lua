@@ -193,7 +193,7 @@ local Holding = false
 
 _G.AimbotEnabled = false
 _G.TeamCheck = false
-_G.AimPart = "Head"
+_G.AimPart = "HumanoidRootPart"
 _G.Sensitivity = 0 
 
 local function GetClosestPlayer()
