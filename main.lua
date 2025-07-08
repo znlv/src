@@ -1,18 +1,49 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/WetCheezit/Bracket-V2/main/src.lua"))()
+-- Credits To The Original Devs @xz, @goof
+getgenv().Config = {
+	Invite = "informant.wtf",
+	Version = "0.0",
+}
 
--- Window
-local Window, MainGUI = Library:CreateWindow("RZ Project | By @94kx")
+getgenv().luaguardvars = {
+	DiscordName = "92kx#0000",
+}
 
--- Tabs
-local Tab1 = Window:CreateTab("Combat")
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/drillygzzly/Other/main/1"))()
 
-local Groupbox1 = Tab1:CreateGroupbox("Aimbot Settings", "Left")
+library:init() -- Initalizes Library Do Not Delete This
 
--- Groupbox 1
-local ExampleToggle = Groupbox1:CreateToggle("Example toggle", function(state)
-  _G.AimbotEnabled = state
-end)
+local Window = library.NewWindow({
+	title = "RZ :3 | The #1 Internal cheat",
+	size = UDim2.new(0, 525, 0, 650)
+})
 
+local tabs = {
+    Tab1 = Window:AddTab("Tab1"),
+	Settings = library:CreateSettingsTab(Window),
+}
+
+-- 1 = Set Section Box To The Left
+-- 2 = Set Section Box To The Right
+
+local sections = {
+	Section1 = tabs.Tab1:AddSection("Section1", 1),
+}
+
+sections.Section1:AddToggle({
+	enabled = true,
+	text = "Aimbot Toggle",
+	flag = "Toggle_1",
+	tooltip = "Tooltip1",
+	risky = true, -- turns text to red and sets label to risky
+	callback = function(lol)
+	    _G.AimbotEnabled = true
+	end
+})
+
+
+library:SendNotification("Notification", 5, Color3.new(255, 0, 0))
+
+--Window:SetOpen(true) -- Either Close Or Open Window
 
 -- Aimbot Lib
 local Camera = workspace.CurrentCamera
