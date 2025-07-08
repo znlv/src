@@ -130,7 +130,7 @@ end
 Section2:NewTextBox("Teleport To:", "TextboxInfo", function(targetUsername)
     players = game:GetService("Players")
     targetPlayer = players:FindFirstChild(targetUsername)
-    players.LocalPlayer.Character:MoveTo(targetPlayer.Character.HumanoidRootPart.Position)
+    players.LocalPlayer.Character:MoveTo(targetPlayer.Character.Head.Position)
 end)
 
 Section2:NewToggle("Wallhack Toggle", "Toggle ESP", function(state)
