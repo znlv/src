@@ -127,11 +127,17 @@ Section2:NewToggle("Aimbot Toggle", "Hold Right Click to Lock On", function(stat
     _G.AimbotEnabled = state
 end)
 Section3:NewToggle("Visible LUA Exuctor", "Run your own lua code", function(state)
-    Frame.Visible = state
+    cc.Enabled = value
 end)
 
 
 
+-- (VOID) : Gui to Lua
+-- Version: 1.4
+
+-- Instances:
+
+local cc = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
 local Exc = Instance.new("TextButton")
@@ -144,13 +150,17 @@ local TextLabel = Instance.new("TextLabel")
 
 --Properties:
 
-Frame.Parent = (game:GetService("CoreGui") or gethui())
+cc.Name = "cc"
+cc.Parent = (game:GetService("CoreGui") or gethui())
+cc.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+cc.Enabled = false
+
+Frame.Parent = cc
 Frame.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.432525963, 0, 0.414572865, 0)
 Frame.Size = UDim2.new(0, 521, 0, 252)
-Frame.Visible = false
 
 UICorner.Parent = Frame
 
@@ -211,7 +221,7 @@ TextLabel.TextSize = 14.000
 
 -- Scripts:
 
-local function AUUUKB_fake_script() -- Exc_2.LocalScript 
+local function RBZJZLG_fake_script() -- Exc_2.LocalScript 
 	local script = Instance.new('LocalScript', Exc_2)
 
 	local button = script.Parent
@@ -229,5 +239,5 @@ local function AUUUKB_fake_script() -- Exc_2.LocalScript
 	end)
 	
 end
-coroutine.wrap(AUUUKB_fake_script)()
+coroutine.wrap(RBZJZLG_fake_script)()
 
