@@ -51,68 +51,12 @@ local function DeactivateESP()
 end
 
 
-local Tab = Window:NewTab("Dutch RP Games")
-local Section2 = Tab:NewSection("Sloks")
-local Section3 = Tab:NewSection("FiveR - Remakes")
-
-Section3:NewButton("Run Part Exploit", "Part Exploit Runner", function()
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/PJ-0001/Scripts/main/Part%20Exploit%20Private'), true ))()
-end)
-
-
-Section3:NewButton("Verkanker Iedereen met een blokje van 10x10", "Part Exploit Runner", function()
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/PJ-0001/Scripts/main/inker'), true ))()
-end)
+local Tab = Window:NewTab("Universal")
+local Section2 = Tab:NewSection("Da-Hood")
 
 
 
--- FiveR
-
-Section3:NewButton("Revive Instant (FiveR)", "Revive", function()
-    game:GetService("ReplicatedStorage").Lifepak.Antiexploit:FireServer()
-end)
-
-Section3:NewButton("Contant Miljard Inspawnen ofzo", "Call all Sounds from Workspace", function()
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/PJ-0001/PxD-Hubs/main/Money%20Dupe%20i%20guess'), true))()
-end)
-
-
-Section3:NewButton("Spam Noodknop", "Dit is nog al iritant", function()
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/PJ-0001/Scripts/main/Spam%20Noodknop'), true ))()
-end)
-
-Section3:NewButton("Earape", "Dit is nog al iritant", function()
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/PJ-0001/Scripts/main/Earape%20Respect%20Filtering'), true ))()
-end)
-
-Section2:NewButton("GunPack", "Dit is nog al iritant", function()
-    local args = { [1] = "Change", [2] = "Veiligheids touw", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-    local args = { [1] = "Change", [2] = "DSI SIG MCX", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-        local args = { [1] = "Change", [2] = "Shield", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-            local args = { [1] = "Change", [2] = "roodgl", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "roze akm", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "AKM", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "HK G28", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "M9", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "GOLDDesert", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "GOLDRem", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "TS Glock 17", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "SIG MCX VIRTUS", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "M93R", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                        local args = { [1] = "Change", [2] = "AK-47", [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-                    
-end)
-
-Section2:NewButton("Rejoin game - SLOKS", "Dit is nog al iritant", function()
-    game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
-end)
-
-Section2:NewTextBox("Wapen naam:", "TextboxInfo", function(txt)
-    local args = { [1] = "Change", [2] = txt, [3] = "Inv" } game:GetService("ReplicatedStorage").Inventory:FireServer(unpack(args))
-
-end)
-
-Section2:NewTextBox("TP to Spelernaam:", "TextboxInfo", function(targetUsername)
+Section2:NewTextBox("TP to:", "TextboxInfo", function(targetUsername)
     players = game:GetService("Players")
     targetPlayer = players:FindFirstChild(targetUsername)
     players.LocalPlayer.Character:MoveTo(targetPlayer.Character.HumanoidRootPart.Position)
@@ -121,22 +65,6 @@ Section2:NewTextBox("TP to Spelernaam:", "TextboxInfo", function(targetUsername)
 end)
 
 
-Section2:NewTextBox("TP to Spelernaam:", "TextboxInfo", function(targetUsername)
-    
-    targetPlayer = players:FindFirstChild(targetUsername)
-	local cFrame = CFrame.new(0,0,0)
- 
- 
-	local Size = {
-	  X = 10,
-	  Y = 10,
-	  Z = 10
-	}
-	 
-	game:GetService('ReplicatedStorage')['ACS_Engine'].Eventos.Breach:FireServer(3,{Fortified={},Destroyable=workspace},CFrame.new(),CFrame.new(),{CFrame=game.Players.targetPlayer.Character.HumanoidRootPart.CFrame*cFrame,Size=Size})
-    
-
-end)
 
 
 Section2:NewButton("Inf Jump", "Dit is nog al iritant", function()
