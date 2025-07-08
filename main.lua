@@ -190,24 +190,18 @@ _G.Sensitivity = 0.3
 _G.MaxDistance = 50 -- max studs to lock onto
 
 local Holding = false
-
 local function GetClosestPlayer()
     local maxDist = math.huge
     local target = nil
     for _, v in ipairs(Players:GetPlayers()) do
         if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
             if not _G.TeamCheck or v.Team ~= Players.LocalPlayer.Team then
-                local rootPart = v.Character.HumanoidRootPart
-                local distance = (rootPart.Position - Camera.CFrame.Position).Magnitude
-
-                if distance <= _G.MaxDistance then
-                    local screenPoint = Camera:WorldToViewportPoint(rootPart.Position)
-                    local mousePos = UserInputService:GetMouseLocation()
-                    local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPoint.X, screenPoint.Y)).Magnitude
-                    if dist < maxDist then
-                        maxDist = dist
-                        target = v
-                    end
+                local screenPoint = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+                local mousePos = UserInputService:GetMouseLocation()
+                local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPoint.X, screenPoint.Y)).Magnitude
+                if dist < maxDist then
+                    maxDist = dist
+                    target = v
                 end
             end
         end
@@ -237,6 +231,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
+
 
 
 Section2:NewToggle("Aimbot Toggle", "Hold Right Click to Lock On", function(state)
