@@ -242,3 +242,55 @@ end)
 Section2:NewToggle("Aimbot Toggle", "Hold Right Click to Lock On", function(state)
     _G.AimbotEnabled = state
 end)
+
+local invis_on = false
+
+function ToggleInvisibility()
+    invis_on = not invis_on
+    
+    if invis_on then
+        local savedpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        wait()
+        
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0, -200, 0)
+        
+        wait(0.15)
+        
+        local Seat = Instance.new('Seat', game.Workspace)
+        Seat.Anchored = false
+        Seat.CanCollide = false
+        Seat.Name = 'invischair'
+        Seat.Transparency = 1
+        Seat.Position = Vector3.new(0, -200, 0)
+        
+        local Weld = Instance.new("Weld", Seat)
+        Weld.Part0 = Seat
+        Weld.Part1 = game.Players.LocalPlayer.Character:FindFirstChild("Torso") or game.Players.LocalPlayer.Character.UpperTorso
+        
+        wait()
+        
+        Seat.CFrame = savedpos
+        
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Invisibility On";
+            Duration = 1;
+            Text = "";
+        })
+    else
+        local invisChair = workspace:FindFirstChild('invischair')
+        if invisChair then
+            invisChair:Remove()
+        end
+        
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Invisibility Off";
+            Duration = 1;
+            Text = "";
+        })
+    end
+end
+
+Section2:NewToggle("Vanish Toggle", "Become invisible for everyone!", function(state)
+    invis_on = state
+    ToggleInvisibility()
+end)
