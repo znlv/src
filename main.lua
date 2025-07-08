@@ -1,269 +1,127 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("RZ Cheats | Universal", "DarkTheme")
 
+-- Tabs & Sections
 local Tab1 = Window:NewTab("Configurations")
 local Section1 = Tab1:NewSection("Keybindings")
-
 Section1:NewKeybind("Toggle Hub", "Minimalize", Enum.KeyCode.Insert, function()
     Library:ToggleUI()
 end)
 
-local Section5 = Tab1:NewSection("Credits")
+local Section5 = Tab1:NewSection("Credits") -- Can fill if needed
 
+local Tab = Window:NewTab("Cheats")
+local Section2 = Tab:NewSection("Universal")
 
-
+-- 🟨 ESP Functions
 local function ActivateESP()
-    for i, v in pairs(game.Players:GetChildren()) do
+    for _, v in pairs(game.Players:GetPlayers()) do
         local chr = v.Character
-        if chr:FindFirstChild('q') then
-            continue
-        else
+        if chr and not chr:FindFirstChild('q') then
             local h = Instance.new('Highlight')
             h.Name = 'q'
-            h.Parent = v.Character
+            h.Parent = chr
             h.FillTransparency = 0.3
-            h.OutlineColor = Color3.new(1, 0, 0)  -- Red outline color
-            h.FillColor = Color3.new(1, 1, 1)  -- White fill color
-            
-            local nameLabel = Instance.new("TextLabel")
-            nameLabel.Name = "NameLabel"
-            nameLabel.Parent = h
-            nameLabel.BackgroundTransparency = 1
-            nameLabel.Position = UDim2.new(0, 0, -0.2, 0)
-            nameLabel.Size = UDim2.new(1, 0, 0.2, 0)
-            nameLabel.Font = Enum.Font.SourceSans
-            nameLabel.Text = v.Name
-            nameLabel.TextColor3 = Color3.new(1, 1, 1)
-            nameLabel.TextScaled = true
-            nameLabel.TextSize = 14.0
-            nameLabel.TextWrapped = true
+            h.OutlineColor = Color3.new(1, 0, 0)
+            h.FillColor = Color3.new(1, 1, 1)
         end
     end
 end
 
-
 local function DeactivateESP()
-	for i, v in pairs(game.Players:GetChildren()) do
-		local chr = v.Character
-		local highlight = chr:FindFirstChild('q')
-		if highlight then
-			highlight:Destroy()
-		end
-	end
+    for _, v in pairs(game.Players:GetPlayers()) do
+        local chr = v.Character
+        if chr then
+            local highlight = chr:FindFirstChild('q')
+            if highlight then
+                highlight:Destroy()
+            end
+        end
+    end
 end
 
-
-local Tab = Window:NewTab("")
-local Section2 = Tab:NewSection("Universal")
-
-_G.infinjump = true
- 
-local Player = game:GetService("Players").LocalPlayer
-local Mouse = Player:GetMouse()
-Mouse.KeyDown:connect(function(k)
-if _G.infinjump then
-if k:byte() == 32 then
-Humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-Humanoid:ChangeState("Jumping")
-wait(0.1)
-Humanoid:ChangeState("Seated")
-end
-end
-end)
- 
-local Player = game:GetService("Players").LocalPlayer
-local Mouse = Player:GetMouse()
-Mouse.KeyDown:connect(function(k)
-k = k:lower()
-if k == "r" then
-if _G.infinjump == true then
-_G.infinjump = false
-else
-_G.infinjump = true
-end
-end
-end)
-end)
-
-Section2:NewToggle("Wallhack Toggle", "ToggleInfo", function(state)
+-- ESP Toggle
+Section2:NewToggle("Wallhack Toggle", "Toggle ESP", function(state)
     if state then
-		ActivateESP()
-
+        ActivateESP()
     else
-		DeactivateESP()
+        DeactivateESP()
     end
 end)
 
+-- 🟨 Infinite Jump
+_G.infinjump = true
+local UserInputService = game:GetService("UserInputService")
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.Space and _G.infinjump then
+        local Humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if Humanoid then
+            Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            wait(0.1)
+            Humanoid:ChangeState(Enum.HumanoidStateType.Seated)
+        end
+    elseif input.KeyCode == Enum.KeyCode.R then
+        _G.infinjump = not _G.infinjump
+    end
+end)
 
-
--- Aimbot Lib
+-- 🟨 Aimbot
 local Camera = workspace.CurrentCamera
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-local Holding = false
+local RunService = game:GetService("RunService")
 
 _G.AimbotEnabled = false
 _G.TeamCheck = false
 _G.AimPart = "Head"
-_G.Sensitivity = 0 
+_G.Sensitivity = 0.1
+
+local Holding = false
 
 local function GetClosestPlayer()
-	local MaximumDistance = math.huge
-	local Target = nil
-  
-  	coroutine.wrap(function()
-    		wait(20); MaximumDistance = math.huge 
-  	end)()
-
-	for _, v in next, Players:GetPlayers() do
-		if v.Name ~= LocalPlayer.Name then
-			if _G.TeamCheck == true then
-				if v.Team ~= LocalPlayer.Team then
-					if v.Character ~= nil then
-						if v.Character:FindFirstChild("HumanoidRootPart") ~= nil then
-							if v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("Humanoid").Health ~= 0 then
-								local ScreenPoint = Camera:WorldToScreenPoint(v.Character:WaitForChild("HumanoidRootPart", math.huge).Position)
-								local VectorDistance = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(ScreenPoint.X, ScreenPoint.Y)).Magnitude
-								
-								if VectorDistance < MaximumDistance then
-									Target = v
-                  							MaximumDistance = VectorDistance
-								end
-							end
-						end
-					end
-				end
-			else
-				if v.Character ~= nil then
-					if v.Character:FindFirstChild("HumanoidRootPart") ~= nil then
-						if v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("Humanoid").Health ~= 0 then
-							local ScreenPoint = Camera:WorldToScreenPoint(v.Character:WaitForChild("HumanoidRootPart", math.huge).Position)
-							local VectorDistance = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(ScreenPoint.X, ScreenPoint.Y)).Magnitude
-							
-							if VectorDistance < MaximumDistance then
-								Target = v
-               							MaximumDistance = VectorDistance
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-
-	return Target
+    local maxDist = math.huge
+    local target = nil
+    for _, v in ipairs(Players:GetPlayers()) do
+        if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
+            if not _G.TeamCheck or v.Team ~= Players.LocalPlayer.Team then
+                local screenPoint = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+                local mousePos = UserInputService:GetMouseLocation()
+                local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPoint.X, screenPoint.Y)).Magnitude
+                if dist < maxDist then
+                    maxDist = dist
+                    target = v
+                end
+            end
+        end
+    end
+    return target
 end
 
-UserInputService.InputBegan:Connect(function(Input)
-    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
         Holding = true
     end
 end)
 
-UserInputService.InputEnded:Connect(function(Input)
-    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
         Holding = false
     end
 end)
 
 RunService.RenderStepped:Connect(function()
-    if Holding == true and _G.AimbotEnabled == true then
-        TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera.CFrame.Position, GetClosestPlayer().Character[_G.AimPart].Position)}):Play()
+    if Holding and _G.AimbotEnabled then
+        local target = GetClosestPlayer()
+        if target and target.Character and target.Character:FindFirstChild(_G.AimPart) then
+            TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine), {
+                CFrame = CFrame.new(Camera.CFrame.Position, target.Character[_G.AimPart].Position)
+            }):Play()
+        end
     end
 end)
 
-
-Section2:NewToggle("Aimbot Toggle", "ToggleInfo", function(state)
-    if state then
-		_G.AimbotEnabled = true
-
-    else
-		_G.AimbotEnabled = false
-    end
+-- Aimbot Toggle
+Section2:NewToggle("Aimbot Toggle", "Hold Right Click to Lock On", function(state)
+    _G.AimbotEnabled = state
 end)
-
-
-
-
--- Aimbot Lib
-local Camera = workspace.CurrentCamera
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-local Holding = false
-
-_G.AimbotEnabled = false
-_G.TeamCheck = false
-_G.AimPart = "Head"
-_G.Sensitivity = 0 
-
-local function GetClosestPlayer()
-	local MaximumDistance = math.huge
-	local Target = nil
-  
-  	coroutine.wrap(function()
-    		wait(20); MaximumDistance = math.huge 
-  	end)()
-
-	for _, v in next, Players:GetPlayers() do
-		if v.Name ~= LocalPlayer.Name then
-			if _G.TeamCheck == true then
-				if v.Team ~= LocalPlayer.Team then
-					if v.Character ~= nil then
-						if v.Character:FindFirstChild("HumanoidRootPart") ~= nil then
-							if v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("Humanoid").Health ~= 0 then
-								local ScreenPoint = Camera:WorldToScreenPoint(v.Character:WaitForChild("HumanoidRootPart", math.huge).Position)
-								local VectorDistance = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(ScreenPoint.X, ScreenPoint.Y)).Magnitude
-								
-								if VectorDistance < MaximumDistance then
-									Target = v
-                  							MaximumDistance = VectorDistance
-								end
-							end
-						end
-					end
-				end
-			else
-				if v.Character ~= nil then
-					if v.Character:FindFirstChild("HumanoidRootPart") ~= nil then
-						if v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("Humanoid").Health ~= 0 then
-							local ScreenPoint = Camera:WorldToScreenPoint(v.Character:WaitForChild("HumanoidRootPart", math.huge).Position)
-							local VectorDistance = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(ScreenPoint.X, ScreenPoint.Y)).Magnitude
-							
-							if VectorDistance < MaximumDistance then
-								Target = v
-               							MaximumDistance = VectorDistance
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-
-	return Target
-end
-
-UserInputService.InputBegan:Connect(function(Input)
-    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-        Holding = true
-    end
-end)
-
-UserInputService.InputEnded:Connect(function(Input)
-    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-        Holding = false
-    end
-end)
-
-RunService.RenderStepped:Connect(function()
-    if Holding == true and _G.AimbotEnabled == true then
-        TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera.CFrame.Position, GetClosestPlayer().Character[_G.AimPart].Position)}):Play()
-    end
-end)
-
