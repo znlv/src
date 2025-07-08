@@ -203,30 +203,49 @@ _G.AimbotEnabled = false
 _G.TeamCheck = false
 _G.AimPart = "UpperTorso"
 _G.Sensitivity = 0
+_G.MaxDistance = 100 -- Max distance in studs
+_G.FocusKey = Enum.KeyCode.Q
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local Camera = workspace.CurrentCamera
 
 local Holding = false
+local FocusTarget = nil
+
 local function GetClosestPlayer()
     local maxDist = math.huge
-    local target = nil
+    local closest = nil
     for _, v in ipairs(Players:GetPlayers()) do
         if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
             if not _G.TeamCheck or v.Team ~= Players.LocalPlayer.Team then
-                local screenPoint = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
-                local mousePos = UserInputService:GetMouseLocation()
-                local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPoint.X, screenPoint.Y)).Magnitude
-                if dist < maxDist then
-                    maxDist = dist
-                    target = v
+                local distanceFromCamera = (Camera.CFrame.Position - v.Character.HumanoidRootPart.Position).Magnitude
+                if distanceFromCamera <= _G.MaxDistance then
+                    local screenPoint = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+                    local mousePos = UserInputService:GetMouseLocation()
+                    local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPoint.X, screenPoint.Y)).Magnitude
+                    if dist < maxDist then
+                        maxDist = dist
+                        closest = v
+                    end
                 end
             end
         end
     end
-    return target
+    return closest
 end
 
 UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         Holding = true
+    elseif input.KeyCode == _G.FocusKey then
+        if not FocusTarget or not FocusTarget.Character or not FocusTarget.Character:FindFirstChild("Humanoid") or FocusTarget.Character.Humanoid.Health <= 0 then
+            FocusTarget = GetClosestPlayer()
+        else
+            FocusTarget = nil -- Unfocus
+        end
     end
 end)
 
@@ -238,7 +257,7 @@ end)
 
 RunService.RenderStepped:Connect(function()
     if Holding and _G.AimbotEnabled then
-        local target = GetClosestPlayer()
+        local target = FocusTarget or GetClosestPlayer()
         if target and target.Character and target.Character:FindFirstChild(_G.AimPart) then
             TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine), {
                 CFrame = CFrame.new(Camera.CFrame.Position, target.Character[_G.AimPart].Position)
