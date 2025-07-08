@@ -1,20 +1,106 @@
+-- 💠 Load UI Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("RZ Cheats | Universal", "DarkTheme")
 
--- Tabs & Sections
+-- 💠 Tabs & Sections
 local Tab1 = Window:NewTab("Configurations")
 local Section1 = Tab1:NewSection("Keybindings")
 Section1:NewKeybind("Toggle Hub", "Minimalize", Enum.KeyCode.Insert, function()
     Library:ToggleUI()
 end)
 
-local Section5 = Tab1:NewSection("Credits") -- Can fill if needed
+local Section5 = Tab1:NewSection("Credits")
 
 local Tab = Window:NewTab("Cheats")
 local Section2 = Tab:NewSection("Universal")
 local Section3 = Tab:NewSection("LUA")
 
--- 🟨 ESP Functions
+-- 💠 Lua Executor UI
+local cc = Instance.new("ScreenGui")
+cc.Name = "cc"
+cc.Parent = (game:GetService("CoreGui") or gethui())
+cc.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+cc.Enabled = false
+
+local Frame = Instance.new("Frame")
+Frame.Parent = cc
+Frame.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+Frame.Position = UDim2.new(0.4325, 0, 0.415, 0)
+Frame.Size = UDim2.new(0, 521, 0, 252)
+Instance.new("UICorner", Frame)
+
+local ExecuteButton = Instance.new("TextButton")
+ExecuteButton.Name = "ExecuteButton"
+ExecuteButton.Parent = Frame
+ExecuteButton.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
+ExecuteButton.Position = UDim2.new(0.68, 0, 0.82, 0)
+ExecuteButton.Size = UDim2.new(0, 154, 0, 35)
+ExecuteButton.Font = Enum.Font.JosefinSans
+ExecuteButton.Text = "Execute"
+ExecuteButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecuteButton.TextSize = 14
+Instance.new("UICorner", ExecuteButton)
+
+local ClearButton = Instance.new("TextButton")
+ClearButton.Name = "ClearButton"
+ClearButton.Parent = Frame
+ClearButton.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
+ClearButton.Position = UDim2.new(0.044, 0, 0.82, 0)
+ClearButton.Size = UDim2.new(0, 154, 0, 35)
+ClearButton.Font = Enum.Font.JosefinSans
+ClearButton.Text = "Clear"
+ClearButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ClearButton.TextSize = 14
+Instance.new("UICorner", ClearButton)
+
+local CodeBox = Instance.new("TextBox")
+CodeBox.Name = "Code"
+CodeBox.Parent = Frame
+CodeBox.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+CodeBox.Position = UDim2.new(0.077, 0, 0.143, 0)
+CodeBox.Size = UDim2.new(0, 440, 0, 158)
+CodeBox.Font = Enum.Font.SourceSans
+CodeBox.Text = ""
+CodeBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+CodeBox.TextSize = 14
+CodeBox.TextXAlignment = Enum.TextXAlignment.Left
+CodeBox.TextYAlignment = Enum.TextYAlignment.Top
+Instance.new("UICorner", CodeBox)
+
+local Title = Instance.new("TextLabel")
+Title.Parent = Frame
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(0, 162, 0, 36)
+Title.Font = Enum.Font.Unknown
+Title.Text = "RZ | Cheats"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 14
+
+-- 💠 Toggle to show/hide the executor
+Section3:NewToggle("Visible LUA Executor", "Run your own Lua code", function(state)
+    cc.Enabled = state
+end)
+
+-- 💠 Execute Button Script
+ExecuteButton.MouseButton1Click:Connect(function()
+    local code = CodeBox.Text
+    local func, err = loadstring(code)
+    if func then
+        local success, runtimeErr = pcall(func)
+        if not success then
+            warn("Runtime error: " .. tostring(runtimeErr))
+        end
+    else
+        warn("Syntax error: " .. tostring(err))
+    end
+end)
+
+-- 💠 Clear Button Script
+ClearButton.MouseButton1Click:Connect(function()
+    CodeBox.Text = ""
+end)
+
+-- 💠 ESP
 local function ActivateESP()
     for _, v in pairs(game.Players:GetPlayers()) do
         local chr = v.Character
@@ -41,7 +127,6 @@ local function DeactivateESP()
     end
 end
 
--- ESP Toggle
 Section2:NewToggle("Wallhack Toggle", "Toggle ESP", function(state)
     if state then
         ActivateESP()
@@ -50,7 +135,7 @@ Section2:NewToggle("Wallhack Toggle", "Toggle ESP", function(state)
     end
 end)
 
--- 🟨 Infinite Jump
+-- 💠 Infinite Jump
 _G.infinjump = true
 local UserInputService = game:GetService("UserInputService")
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -67,7 +152,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- 🟨 Aimbot
+-- 💠 Aimbot
 local Camera = workspace.CurrentCamera
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -75,8 +160,8 @@ local RunService = game:GetService("RunService")
 
 _G.AimbotEnabled = false
 _G.TeamCheck = false
-_G.AimPart = "Head"
-_G.Sensitivity = 0.1
+_G.AimPart = "Torso"
+_G.Sensitivity = 0.3
 
 local Holding = false
 
@@ -122,122 +207,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- Aimbot Toggle
 Section2:NewToggle("Aimbot Toggle", "Hold Right Click to Lock On", function(state)
     _G.AimbotEnabled = state
 end)
-Section3:NewToggle("Visible LUA Exuctor", "Run your own lua code", function(state)
-    cc.Enabled = value
-end)
-
-
-
--- (VOID) : Gui to Lua
--- Version: 1.4
-
--- Instances:
-
-local cc = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local Exc = Instance.new("TextButton")
-local UICorner_2 = Instance.new("UICorner")
-local Code = Instance.new("TextBox")
-local UICorner_3 = Instance.new("UICorner")
-local Exc_2 = Instance.new("TextButton")
-local UICorner_4 = Instance.new("UICorner")
-local TextLabel = Instance.new("TextLabel")
-
---Properties:
-
-cc.Name = "cc"
-cc.Parent = (game:GetService("CoreGui") or gethui())
-cc.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-cc.Enabled = false
-
-Frame.Parent = cc
-Frame.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
-Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.432525963, 0, 0.414572865, 0)
-Frame.Size = UDim2.new(0, 521, 0, 252)
-
-UICorner.Parent = Frame
-
-Exc.Name = "Exc"
-Exc.Parent = Frame
-Exc.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
-Exc.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Exc.BorderSizePixel = 0
-Exc.Position = UDim2.new(0.679462552, 0, 0.817460299, 0)
-Exc.Size = UDim2.new(0, 154, 0, 35)
-Exc.Font = Enum.Font.JosefinSans
-Exc.Text = "Execute"
-Exc.TextColor3 = Color3.fromRGB(255, 255, 255)
-Exc.TextSize = 14.000
-
-UICorner_2.Parent = Exc
-
-Code.Name = "Code"
-Code.Parent = Frame
-Code.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
-Code.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Code.BorderSizePixel = 0
-Code.Position = UDim2.new(0.0767754316, 0, 0.142857149, 0)
-Code.Size = UDim2.new(0, 440, 0, 158)
-Code.Font = Enum.Font.SourceSans
-Code.Text = ""
-Code.TextColor3 = Color3.fromRGB(0, 0, 0)
-Code.TextSize = 14.000
-Code.TextXAlignment = Enum.TextXAlignment.Left
-Code.TextYAlignment = Enum.TextYAlignment.Top
-
-UICorner_3.Parent = Code
-
-Exc_2.Name = "Exc"
-Exc_2.Parent = Frame
-Exc_2.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
-Exc_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Exc_2.BorderSizePixel = 0
-Exc_2.Position = UDim2.new(0.0441458747, 0, 0.817460299, 0)
-Exc_2.Size = UDim2.new(0, 154, 0, 35)
-Exc_2.Font = Enum.Font.JosefinSans
-Exc_2.Text = "Clear"
-Exc_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-Exc_2.TextSize = 14.000
-
-UICorner_4.Parent = Exc_2
-
-TextLabel.Parent = Frame
-TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.BackgroundTransparency = 1.000
-TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.BorderSizePixel = 0
-TextLabel.Size = UDim2.new(0, 162, 0, 36)
-TextLabel.Font = Enum.Font.Unknown
-TextLabel.Text = "RZ | Cheats"
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.TextSize = 14.000
-
--- Scripts:
-
-local function RBZJZLG_fake_script() -- Exc_2.LocalScript 
-	local script = Instance.new('LocalScript', Exc_2)
-
-	local button = script.Parent
-	local codeField = script.Parent.Parent:WaitForChild("Code")
-	
-	button.MouseButton1Click:Connect(function()
-		local code = codeField.Text
-		local func, err = loadstring(code)
-	
-		if func then
-			pcall(func)
-		else
-			warn("Code error: " .. err)
-		end
-	end)
-	
-end
-coroutine.wrap(RBZJZLG_fake_script)()
-
