@@ -276,8 +276,6 @@ end)
 
 local invis_on = false
 
-local invis_on = false
-
 function ToggleInvisibility()
     invis_on = not invis_on
     
