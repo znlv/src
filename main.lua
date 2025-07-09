@@ -160,20 +160,7 @@ Section2:NewToggle("Wallhack Toggle", "Toggle ESP", function(state)
 end)
 
 
-_G.infinjump = true
-local UserInputService = game:GetService("UserInputService")
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.KeyCode == Enum.KeyCode.Space and _G.infinjump then
-        local Humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if Humanoid then
-            Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            wait(0.1)
-            Humanoid:ChangeState(Enum.HumanoidStateType.Seated)
-        end
-    elseif input.KeyCode == Enum.KeyCode.R then
-        _G.infinjump = not _G.infinjump
-    end
+
 end)
 
 -- 💠 Aimbot
@@ -289,6 +276,8 @@ end)
 
 local invis_on = false
 
+local invis_on = false
+
 function ToggleInvisibility()
     invis_on = not invis_on
     
@@ -334,9 +323,9 @@ function ToggleInvisibility()
     end
 end
 
+
 Section2:NewToggle("Vanish Toggle", "Become invisible for everyone!", function(state)
-    invis_on = state
-    ToggleInvisibility()
+    ToggleInvisibility(state)
 end)
 
 
@@ -387,6 +376,6 @@ RunService.RenderStepped:Connect(function()
 end)
 
 
-Section2:NewToggle("Triggerbot Toggle", "Automatic Detection if a player is under your crosshair it will fire", function(state)
+Section2:NewToggle("Triggerbot Toggle", "", function(state)
     triggerbotEnabled = state
 end)
