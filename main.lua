@@ -1,8 +1,6 @@
--- 💠 Load UI Library
+
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("RZ Cheats | Universal", "DarkTheme")
-
--- 💠 Tabs & Sections
 local Tab1 = Window:NewTab("Configurations")
 local Section1 = Tab1:NewSection("Keybindings")
 Section1:NewKeybind("Toggle Hub", "Minimalize", Enum.KeyCode.Insert, function()
@@ -92,12 +90,12 @@ Title.Text = "RZ | Cheats"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 14
 
--- 💠 Toggle to show/hide the executor
+
 Section3:NewToggle("Toggle LUA Executor", "Run your own Lua code", function(state)
     cc.Enabled = state
 end)
 
--- 💠 Execute Button Script
+
 ExecuteButton.MouseButton1Click:Connect(function()
     local code = CodeBox.Text
     local func, err = loadstring(code)
@@ -111,7 +109,7 @@ ExecuteButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- 💠 Clear Button Script
+
 ClearButton.MouseButton1Click:Connect(function()
     CodeBox.Text = ""
 end)
@@ -161,7 +159,7 @@ Section2:NewToggle("Wallhack Toggle", "Toggle ESP", function(state)
     end
 end)
 
--- 💠 Infinite Jump
+
 _G.infinjump = true
 local UserInputService = game:GetService("UserInputService")
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -338,4 +336,57 @@ end
 
 Section2:NewToggle("Vanish Toggle", "Become invisible for everyone!", function(state)
     invis_on = state
+    ToggleInvisibilty()
+end)
+
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Camera = workspace.CurrentCamera
+
+local triggerbotEnabled = false
+
+local function simulateClick()
+	mouse1click()
+end
+
+local function isEnemy(model)
+	if model and model:IsA("Model") and model:FindFirstChild("Humanoid") then
+		local player = Players:GetPlayerFromCharacter(model)
+		return player and player ~= LocalPlayer
+	end
+	return false
+end
+
+local function isVisible(position)
+	local screenPoint, onScreen = Camera:WorldToViewportPoint(position)
+	return onScreen and screenPoint.Z > 0
+end
+
+RunService.RenderStepped:Connect(function()
+	if not triggerbotEnabled then return end
+
+	local unitRay = Camera:ScreenPointToRay(Mouse.X, Mouse.Y)
+	
+	local raycastParams = RaycastParams.new()
+	raycastParams.FilterDescendantsInstances = {LocalPlayer.Character}
+	raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+	raycastParams.IgnoreWater = true
+	local result = workspace:Raycast(unitRay.Origin, unitRay.Direction * 1000, raycastParams)
+	if result and result.Instance then
+		local targetModel = result.Instance:FindFirstAncestorOfClass("Model")
+		local targetPos = targetModel and (targetModel.PrimaryPart and targetModel.PrimaryPart.Position or targetModel:GetPivot().Position)
+
+		if isEnemy(targetModel) and targetPos and isVisible(targetPos) then
+			simulateClick()
+		end
+	end
+end)
+
+
+Section2:NewToggle("Triggerbot Toggle", "Automatic Detection if a player is under your crosshair it will fire", function(state)
+    triggerbotEnabled = state
 end)
