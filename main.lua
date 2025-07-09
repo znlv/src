@@ -161,8 +161,6 @@ end)
 
 
 
-end)
-
 -- 💠 Aimbot
 local Camera = workspace.CurrentCamera
 local Players = game:GetService("Players")
@@ -276,6 +274,7 @@ end)
 
 local invis_on = false
 
+
 function ToggleInvisibility()
     invis_on = not invis_on
     
@@ -327,3 +326,61 @@ Section2:NewToggle("Vanish Toggle", "Become invisible for everyone!", function(s
 end)
 
 
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Camera = workspace.CurrentCamera
+
+local triggerbotEnabled = false
+
+
+local function simulateClick()
+    if mouse1click then
+        mouse1click()
+    else
+        UserInputService:SetKeyDown(Enum.UserInputType.MouseButton1)
+        UserInputService:SetKeyUp(Enum.UserInputType.MouseButton1)
+    end
+end
+
+local function isEnemy(model)
+    if model and model:IsA("Model") and model:FindFirstChild("Humanoid") then
+        local player = Players:GetPlayerFromCharacter(model)
+        return player and player ~= LocalPlayer
+    end
+    return false
+end
+
+local function isVisible(position)
+    local screenPoint, onScreen = Camera:WorldToViewportPoint(position)
+    return onScreen and screenPoint.Z > 0
+end
+
+RunService.RenderStepped:Connect(function()
+    if not triggerbotEnabled then return end
+
+    local unitRay = Camera:ScreenPointToRay(Mouse.X, Mouse.Y)
+
+    local raycastParams = RaycastParams.new()
+    raycastParams.FilterDescendantsInstances = {LocalPlayer.Character}
+    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+    raycastParams.IgnoreWater = true
+
+    local result = workspace:Raycast(unitRay.Origin, unitRay.Direction * 1000, raycastParams)
+    if result and result.Instance then
+        local targetModel = result.Instance:FindFirstAncestorOfClass("Model")
+        if targetModel then
+            local targetPos = targetModel.PrimaryPart and targetModel.PrimaryPart.Position or targetModel:GetPivot().Position
+
+            if isEnemy(targetModel) and targetPos and isVisible(targetPos) then
+                simulateClick()
+            end
+        end
+    end
+end)
+
+Section2:NewToggle("Triggerbot Toggle", "", function(state)
+    triggerbotEnabled = state
+end)
